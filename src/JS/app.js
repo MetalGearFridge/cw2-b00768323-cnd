@@ -5,7 +5,7 @@ PRS = "https://prod-60.northeurope.logic.azure.com:443/workflows/3b83fbbd60194fe
 // DIP1 = ""
 // DIP2 = ""
 
-BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net/";
+BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 
 //Handlers for button clicks
 $(document).ready(function() {
@@ -29,11 +29,19 @@ $(document).ready(function() {
 
 //A function to submit a new post to the REST endpoint 
 function submitNewPost(){
+
+  //get file extension from file upload
+  var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
+  console.log(fileExtension);
+
+  //get filename from file upload
+  var fileName = $('#UpFile').val().split('\\').pop().toLowerCase();
+  console.log(fileName);
   
-  submitData = new FormData();
+  submitData = new FormData(); 
 
   //Get form variables and append them to the form data object
-  submitData.append('FileName', $('#FileName').val());
+  submitData.append('FileName', fileName);
   submitData.append('userID', $('#userID').val());
   submitData.append('userName', $('#userName').val());
   submitData.append('postDescription', $('#postDescription').val());
@@ -49,6 +57,15 @@ function submitNewPost(){
     processData: false,
     type: 'POST',
     success: function(data){
+      $('#FileName').val('');
+      $('#userID').val('');
+      $('#userName').val('');
+      $('#UpFile').val('');
+      $('#postDescription').val('');
+
+      $('#submitNewPostModal').modal('hide');
+      $('.modal-backdrop').remove();
+      
       getPosts();
     }
   });
