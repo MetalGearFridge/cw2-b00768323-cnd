@@ -69,8 +69,8 @@ function submitNewPost() {
 
   var userResponse = getUserInfo();
 
-  console.log(userResponse.userName);
-  console.log(userResponse.userID);
+  console.log(userResponse.userDetails);
+  console.log(userResponse.userId);
 
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
