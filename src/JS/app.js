@@ -10,10 +10,6 @@ BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 //Handlers for button clicks
 $(document).ready(function () {
 
-  getPosts();
-  const userDetails = getUserInfo();
-  preparePage(userDetails);
-
   $("#retPosts").click(function () {
 
     //Run the get post list function
@@ -28,6 +24,19 @@ $(document).ready(function () {
     submitNewPost();
 
   });
+
+});
+
+$(window).on('load', function () {
+  
+  //Run the get post list function
+  getPosts();
+
+  //Get the user info
+  var userResponse = getUserInfo();
+
+  //Prepare the page based on the user info
+  preparePage(userResponse);
 
 });
 
@@ -69,8 +78,8 @@ function submitNewPost() {
 
   var userResponse = getUserInfo();
 
-  console.log(userResponse.userDetails);
-  console.log(userResponse.userId);
+  console.log(getUsername());
+  console.log(getUserId());
 
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
@@ -113,6 +122,35 @@ function submitNewPost() {
   });
 
 
+}
+
+async function getUsername() {  
+  // call the endpoint  
+  const response = await fetch('/.auth/me');  
+  // convert to JSON  
+  const json = await response.json();  
+  // ensure clientPrincipal and userDetails exist  
+  if(json.clientPrincipal && json.clientPrincipal.userDetails) {  
+      // return userDetails (the username)  
+      return json.clientPrincipal.userDetails;  
+  } else {  
+      // return null if anonymous  
+      return null;  
+  }  
+}
+async function getUserId() {  
+  // call the endpoint  
+  const response = await fetch('/.auth/me');  
+  // convert to JSON  
+  const json = await response.json();  
+  // ensure clientPrincipal and userDetails exist  
+  if(json.clientPrincipal && json.clientPrincipal.userId) {  
+      // return userDetails (the username)  
+      return json.clientPrincipal.userId;  
+  } else {  
+      // return null if anonymous  
+      return null;  
+  }  
 }
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
