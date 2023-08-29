@@ -82,8 +82,8 @@ function submitNewPost(){
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
 function getPosts(){
-  fetchMoviesJSON().then(movies => {
-    console.log(movies); // fetched movies
+  getUserInfo().then(clientPrincipal => {
+    console.log(clientPrincipal); // fetched user
   });
 
   //Replace the current HTML in that div with a loading message
