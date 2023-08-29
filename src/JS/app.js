@@ -67,11 +67,8 @@ async function getUserInfo() {
 //A function to submit a new post to the REST endpoint 
 function submitNewPost() {
 
-  getUserInfo().then(clientPrincipal => {
-    console.log(clientPrincipal); // fetched user
-  });
-
-  var obj = JSON.parse(clientPrincipal);
+  var userResponse = getUserInfo();
+  var obj = JSON.parse(userResponse);
 
   console.log(obj.userName);
   console.log(obj.userID);
@@ -121,10 +118,8 @@ function submitNewPost() {
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
 function getPosts() {
-  getUserInfo().then(clientPrincipal => {
-    preparePage(clientPrincipal);
-    // fetched user
-  });
+  var userResponse = getUserInfo();
+  preparePage(userResponse);
 
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
