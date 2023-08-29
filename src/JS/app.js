@@ -8,29 +8,31 @@ PRS = "https://prod-60.northeurope.logic.azure.com:443/workflows/3b83fbbd60194fe
 BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 
 //Handlers for button clicks
-$(document).ready(function() {
+$(document).ready(function () {
 
- 
-  $("#retPosts").click(function(){
 
-      //Run the get post list function
-      getPosts();
+  $("#retPosts").click(function () {
 
-  }); 
+    //Run the get post list function
+    getPosts();
 
-   //Handler for the new post submission button
-  $("#subNewForm").click(function(){
+  });
+
+  //Handler for the new post submission button
+  $("#subNewForm").click(function () {
 
     //Execute the submit new post function
     submitNewPost();
-    
-  }); 
 
-  $(window).on('load', preparePage() )
+  });
+
+  $(window).on('load', preparePage())
 
 });
 
 function preparePage() {
+  var clientPrincipal = null;
+
   getUserInfo().then(clientPrincipal => {
     console.log(clientPrincipal); // fetched user
   });
@@ -40,21 +42,20 @@ function preparePage() {
 
     let roles = jsonData["userRoles"]
 
-    if(clientPrincipal != null && roles.includes("authenticated")){
-      $('#loginBtn').hide();
-      $('#logoutBtn').show();
-      $('#submitNewPostDiv').show();
-    }
-    else{
-      $('#loginBtn').show();
-      $('#logoutBtn').hide();
-      $('#submitNewPostDiv').hide();
-    }
-
   } catch (error) {
     console.log(error + "Could not parse client principal");
   }
-  
+
+  if (clientPrincipal != null && roles.includes("authenticated")) {
+    $('#loginBtn').hide();
+    $('#logoutBtn').show();
+    $('#submitNewPostDiv').show();
+  }
+  else {
+    $('#loginBtn').show();
+    $('#logoutBtn').hide();
+    $('#submitNewPostDiv').hide();
+  }
 }
 
 async function getUserInfo() {
@@ -65,7 +66,7 @@ async function getUserInfo() {
 }
 
 //A function to submit a new post to the REST endpoint 
-function submitNewPost(){
+function submitNewPost() {
 
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
@@ -74,8 +75,8 @@ function submitNewPost(){
   //get filename from file upload
   var fileName = $('#UpFile').val().split('\\').pop().toLowerCase();
   console.log(fileName);
-  
-  submitData = new FormData(); 
+
+  submitData = new FormData();
 
   //Get form variables and append them to the form data object
   submitData.append('FileName', fileName);
@@ -93,7 +94,7 @@ function submitNewPost(){
     contentType: false,
     processData: false,
     type: 'POST',
-    success: function(data){
+    success: function (data) {
       $('#FileName').val('');
       $('#userID').val('');
       $('#userName').val('');
@@ -102,7 +103,7 @@ function submitNewPost(){
 
       $('#submitNewPostModal').modal('hide');
       $('.modal-backdrop').remove();
-      
+
       getPosts();
     }
   });
@@ -111,7 +112,7 @@ function submitNewPost(){
 }
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
-function getPosts(){
+function getPosts() {
   getUserInfo().then(clientPrincipal => {
     console.log(clientPrincipal); // fetched user
   });
@@ -119,7 +120,7 @@ function getPosts(){
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
 
-  $.getJSON(PRS, function( data ) {
+  $.getJSON(PRS, function (data) {
 
     //Create an array to hold all the retrieved assets
     var items = [];
@@ -127,14 +128,14 @@ function getPosts(){
     console.log(data);
 
     //Iterate through the returned records and build HTML, incorporating the key values of the record in the data
-    $.each( data, function( key, val ) {
+    $.each(data, function (key, val) {
 
       items.push("<hr />");
-      items.push("<video controls> <source type='video/mp4' src='"+BLOB_ACCOUNT + val["filePath"] +"' width='400'/></video><br />")
-      items.push( "File : " + val["fileName"] + "<br />");
-      items.push( "Uploaded by: " + val["userName"] + " (user id: "+val["userID"]+")<br />");
-      items.push( "<hr />");
-      items.push( '<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
+      items.push("<video controls> <source type='video/mp4' src='" + BLOB_ACCOUNT + val["filePath"] + "' width='400'/></video><br />")
+      items.push("File : " + val["fileName"] + "<br />");
+      items.push("Uploaded by: " + val["userName"] + " (user id: " + val["userID"] + ")<br />");
+      items.push("<hr />");
+      items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
 
     });
 
@@ -142,21 +143,21 @@ function getPosts(){
     $('#PostList').empty();
 
     //Append the contents of the items array to the PostList Div
-    $( "<ul/>", {
-    "class": "my-new-list",
-    html: items.join( "" )
-    }).appendTo( "#PostList" );
+    $("<ul/>", {
+      "class": "my-new-list",
+      html: items.join("")
+    }).appendTo("#PostList");
   });
 
- 
+
 }
 
-function deleteAsset(id){
+function deleteAsset(id) {
   $.ajax({
     type: "DELETE",
     //Note the need to concatenate the
     url: DII1 + id + DII2,
-  }).done(function( msg ) {
+  }).done(function (msg) {
     //On success, update the assetlist
     getPosts();
   });
