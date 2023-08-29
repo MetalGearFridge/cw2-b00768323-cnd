@@ -25,31 +25,33 @@ $(document).ready(function () {
 
   });
 
+  $("#logoutBtn").click(function () {
+    $.removeCookie("StaticWebAppsAuthCookie")
+    ShowLoggedOutDetails();
+  });
+
 });
 
 $(window).on('load', function () {
-  
+
   //Run the get post list function
   getPosts();
 
-  //Get the user info
-  var userResponse = getUserInfo();
-
   //Prepare the page based on the user info
-  preparePage(userResponse);
+  preparePage();
 
 });
 
-function preparePage(userDetails){
-  if(userDetails.userId == null) {
-    ShowLoggedOutDetails();
+async function preparePage() {
+  if (await getUserId()) {
+    ShowLoggedInDetails();
   }
   else {
-    ShowLoggedInDetails();
+    ShowLoggedOutDetails();
   }
 }
 
-function ShowLoggedOutDetails() {
+async function ShowLoggedOutDetails() {
   $('#loginBtn').show();
   $('#logoutBtn').hide();
   $('#submitNewPostDiv').hide();
@@ -57,7 +59,7 @@ function ShowLoggedOutDetails() {
   $('#signedOutHeader2').show();
 }
 
-function ShowLoggedInDetails() {
+async function ShowLoggedInDetails() {
   $('#loginBtn').hide();
   $('#logoutBtn').show();
   $('#submitNewPostDiv').show();
@@ -74,12 +76,9 @@ async function getUserInfo() {
 }
 
 //A function to submit a new post to the REST endpoint 
-function submitNewPost() {
-
-  var userResponse = getUserInfo();
-
-  console.log(getUsername());
-  console.log(getUserId());
+async function submitNewPost() {
+  userUsername = await getUsername();
+  userUserId = await getUserId();
 
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
@@ -93,8 +92,8 @@ function submitNewPost() {
 
   //Get form variables and append them to the form data object
   submitData.append('FileName', fileName);
-  submitData.append('userID', $('#userID').val());
-  submitData.append('userName', $('#userName').val());
+  submitData.append('userID', userUserId);
+  submitData.append('userName', userUsername);
   submitData.append('postDescription', $('#postDescription').val());
   submitData.append('File', $('#UpFile')[0].files[0]);
 
@@ -124,40 +123,37 @@ function submitNewPost() {
 
 }
 
-async function getUsername() {  
+async function getUsername() {
   // call the endpoint  
-  const response = await fetch('/.auth/me');  
+  const response = await fetch('/.auth/me');
   // convert to JSON  
-  const json = await response.json();  
+  const json = await response.json();
   // ensure clientPrincipal and userDetails exist  
-  if(json.clientPrincipal && json.clientPrincipal.userDetails) {  
-      // return userDetails (the username)  
-      return json.clientPrincipal.userDetails;  
-  } else {  
-      // return null if anonymous  
-      return null;  
-  }  
+  if (json.clientPrincipal && json.clientPrincipal.userDetails) {
+    // return userDetails (the username)  
+    return json.clientPrincipal.userDetails;
+  } else {
+    // return null if anonymous  
+    return null;
+  }
 }
-async function getUserId() {  
+async function getUserId() {
   // call the endpoint  
-  const response = await fetch('/.auth/me');  
+  const response = await fetch('/.auth/me');
   // convert to JSON  
-  const json = await response.json();  
+  const json = await response.json();
   // ensure clientPrincipal and userDetails exist  
-  if(json.clientPrincipal && json.clientPrincipal.userId) {  
-      // return userDetails (the username)  
-      return json.clientPrincipal.userId;  
-  } else {  
-      // return null if anonymous  
-      return null;  
-  }  
+  if (json.clientPrincipal && json.clientPrincipal.userId) {
+    // return userDetails (the username)  
+    return json.clientPrincipal.userId;
+  } else {
+    // return null if anonymous  
+    return null;
+  }
 }
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
 function getPosts() {
-  var userResponse = getUserInfo();
-  preparePage(userResponse);
-
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
 
