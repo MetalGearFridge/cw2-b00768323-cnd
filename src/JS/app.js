@@ -48,7 +48,7 @@ function ShowLoggedOutDetails() {
   $('#signedOutHeader2').show();
 }
 
-function showLoggedInDetails() {
+function ShowLoggedInDetails() {
   $('#loginBtn').hide();
   $('#logoutBtn').show();
   $('#submitNewPostDiv').show();
