@@ -68,10 +68,9 @@ async function getUserInfo() {
 function submitNewPost() {
 
   var userResponse = getUserInfo();
-  var obj = JSON.parse(userResponse);
 
-  console.log(obj.userName);
-  console.log(obj.userID);
+  console.log(userResponse.userName);
+  console.log(userResponse.userID);
 
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
