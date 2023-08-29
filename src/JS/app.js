@@ -67,6 +67,16 @@ async function getUserInfo() {
 //A function to submit a new post to the REST endpoint 
 function submitNewPost() {
 
+  getUserInfo().then(clientPrincipal => {
+    console.log(clientPrincipal); // fetched user
+  });
+
+  var obj = JSON.parse(clientPrincipal);
+
+  console.log(obj.userName);
+  console.log(obj.userID);
+
+
   //get file extension from file upload
   var fileExtension = $('#UpFile').val().split('.').pop().toLowerCase();
   console.log(fileExtension);
@@ -115,6 +125,9 @@ function getPosts() {
   getUserInfo().then(clientPrincipal => {
     console.log(clientPrincipal); // fetched user
   });
+
+  preparePage(clientPrincipal);
+
 
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
