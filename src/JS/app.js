@@ -82,12 +82,12 @@ function submitNewPost(){
 
 //A function to get a list of all the posts and write them to the Div with the postList Div
 function getPosts(){
+  fetchMoviesJSON().then(movies => {
+    console.log(movies); // fetched movies
+  });
+
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
-
-  (async () => {
-    console.log(await getUserInfo());
-    })();
 
   $.getJSON(PRS, function( data ) {
 
