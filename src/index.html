@@ -31,9 +31,13 @@
           <h3>Want to start sharing?</h3>
           <h4>Sign in with your social media account</h4>
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signInModal">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signInModal" id="loginBtn">
             Sign In
           </button>
+          <button type="button" class="btn btn-secondary" href="/.auth/logout" id="logoutBtn">
+            Log Out
+          </button>
+
 
           <!-- Modal -->
           <div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
@@ -71,7 +75,7 @@
       <div class="col-8 p-3" style="text-align: center;border-bottom:1px solid #222222;">
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitNewPostModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitNewPostModal" id="createNewPostBtn">
           Create New Post
         </button>
 

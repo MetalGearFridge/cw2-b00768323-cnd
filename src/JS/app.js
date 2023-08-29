@@ -25,7 +25,37 @@ $(document).ready(function() {
     submitNewPost();
     
   }); 
+
+  $(window).on('load', preparePage() )
+
 });
+
+function preparePage() {
+  getUserInfo().then(clientPrincipal => {
+    console.log(clientPrincipal); // fetched user
+  });
+
+  try {
+    let jsonData = JSON.parse(clientPrincipal);
+
+    let roles = jsonData["userRoles"]
+
+    if(clientPrincipal != null && roles.includes("authenticated")){
+      $('#loginBtn').hide();
+      $('#logoutBtn').show();
+      $('#submitNewPostDiv').show();
+    }
+    else{
+      $('#loginBtn').show();
+      $('#logoutBtn').hide();
+      $('#submitNewPostDiv').hide();
+    }
+
+  } catch (error) {
+    console.log(error + "Could not parse client principal");
+  }
+  
+}
 
 async function getUserInfo() {
   const response = await fetch('/.auth/me');
