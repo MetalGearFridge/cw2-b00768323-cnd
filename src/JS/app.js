@@ -10,6 +10,7 @@ BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 //Handlers for button clicks
 $(document).ready(function () {
 
+  preparePage();
 
   $("#retPosts").click(function () {
 
@@ -26,8 +27,6 @@ $(document).ready(function () {
 
   });
 
-  $(window).on('load', preparePage())
-
 });
 
 function preparePage() {
@@ -37,25 +36,35 @@ function preparePage() {
     console.log(clientPrincipal); // fetched user
   });
 
+  let roles = [];
+
   try {
     let jsonData = JSON.parse(clientPrincipal);
 
-    let roles = jsonData["userRoles"]
+    roles = jsonData["userRoles"]
 
   } catch (error) {
     console.log(error + "Could not parse client principal");
   }
 
   if (clientPrincipal != null && roles.includes("authenticated")) {
-    $('#loginBtn').hide();
-    $('#logoutBtn').show();
-    $('#submitNewPostDiv').show();
+    showLoggedInDetails();
   }
   else {
-    $('#loginBtn').show();
-    $('#logoutBtn').hide();
-    $('#submitNewPostDiv').hide();
+    ShowLoggedOutDetails();
   }
+}
+
+function ShowLoggedOutDetails() {
+  $('#loginBtn').show();
+  $('#logoutBtn').hide();
+  $('#submitNewPostDiv').hide();
+}
+
+function showLoggedInDetails() {
+  $('#loginBtn').hide();
+  $('#logoutBtn').show();
+  $('#submitNewPostDiv').show();
 }
 
 async function getUserInfo() {
