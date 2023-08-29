@@ -32,7 +32,7 @@ $(document).ready(function () {
 });
 
 function preparePage(userDetails){
-  if(userDetails !== null) {
+  if(userDetails.userRoles.length > 1) {
     showLoggedInDetails();
   }
   else {
