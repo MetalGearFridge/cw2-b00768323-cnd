@@ -7,12 +7,12 @@ PRS = "https://prod-60.northeurope.logic.azure.com:443/workflows/3b83fbbd60194fe
 
 BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 
-const userDetails = getUserInfo();
-console.log(userDetails);
-preparePage(userDetails);
-
 //Handlers for button clicks
 $(document).ready(function () {
+
+  getPosts();
+  const userDetails = getUserInfo();
+  preparePage(userDetails);
 
   $("#retPosts").click(function () {
 
@@ -44,12 +44,17 @@ function ShowLoggedOutDetails() {
   $('#loginBtn').show();
   $('#logoutBtn').hide();
   $('#submitNewPostDiv').hide();
+  $('#signedOutHeader1').show();
+  $('#signedOutHeader2').show();
 }
 
 function showLoggedInDetails() {
   $('#loginBtn').hide();
   $('#logoutBtn').show();
   $('#submitNewPostDiv').show();
+  $('#signedOutHeader1').hide();
+  $('#signedOutHeader2').hide();
+
 }
 
 async function getUserInfo() {
