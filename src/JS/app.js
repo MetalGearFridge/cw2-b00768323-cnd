@@ -32,11 +32,11 @@ $(document).ready(function () {
 });
 
 function preparePage(userDetails){
-  if(userDetails.userRoles.length > 1) {
-    showLoggedInDetails();
+  if(userDetails == null) {
+    ShowLoggedOutDetails();
   }
   else {
-    ShowLoggedOutDetails();
+    ShowLoggedInDetails();
   }
 }
 
