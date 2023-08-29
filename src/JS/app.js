@@ -27,6 +27,13 @@ $(document).ready(function() {
   }); 
 });
 
+async function getUserInfo() {
+  const response = await fetch('/.auth/me');
+  const payload = await response.json();
+  const { clientPrincipal } = payload;
+  return clientPrincipal;
+}
+
 //A function to submit a new post to the REST endpoint 
 function submitNewPost(){
 
@@ -77,6 +84,10 @@ function submitNewPost(){
 function getPosts(){
   //Replace the current HTML in that div with a loading message
   $('#PostList').html('<div class="spinner-border" role="status"><span class="sr-only"> &nbsp;</span>')
+
+  (async () => {
+    console.log(await getUserInfo());
+    })();
 
   $.getJSON(PRS, function( data ) {
 
