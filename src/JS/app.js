@@ -7,10 +7,12 @@ PRS = "https://prod-60.northeurope.logic.azure.com:443/workflows/3b83fbbd60194fe
 
 BLOB_ACCOUNT = "https://blobstoragecw2b00768323.blob.core.windows.net";
 
+const userDetails = getUserInfo();
+console.log(userDetails);
+preparePage(userDetails);
+
 //Handlers for button clicks
 $(document).ready(function () {
-
-  preparePage();
 
   $("#retPosts").click(function () {
 
@@ -29,25 +31,8 @@ $(document).ready(function () {
 
 });
 
-function preparePage() {
-  var clientPrincipal = null;
-
-  getUserInfo().then(clientPrincipal => {
-    console.log(clientPrincipal); // fetched user
-  });
-
-  let roles = [];
-
-  try {
-    let jsonData = JSON.parse(clientPrincipal);
-
-    roles = jsonData["userRoles"]
-
-  } catch (error) {
-    console.log(error + "Could not parse client principal");
-  }
-
-  if (clientPrincipal != null && roles.includes("authenticated")) {
+function preparePage(userDetails){
+  if(userDetails !== null) {
     showLoggedInDetails();
   }
   else {
