@@ -184,6 +184,7 @@ function getPosts() {
         items.push("</audio><br />");
       }
 
+      items.push(val["postDescription"]);
       items.push("Uploaded by: " + val["userName"]);
       items.push("<hr />");
       items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
