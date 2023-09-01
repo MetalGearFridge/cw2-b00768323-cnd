@@ -94,6 +94,7 @@ async function submitNewPost() {
   submitData.append('FileName', fileName);
   submitData.append('userID', userUserId);
   submitData.append('userName', userUsername);
+  submitData.append('fileExtension', fileExtension);
   submitData.append('postDescription', $('#postDescription').val());
   submitData.append('File', $('#UpFile')[0].files[0]);
 
@@ -168,12 +169,26 @@ function getPosts() {
     $.each(data, function (key, val) {
 
       items.push("<hr />");
-      items.push("<video controls> <source type='video/mp4' src='" + BLOB_ACCOUNT + val["filePath"] + "' width='400'/></video><br />")
-      items.push("File : " + val["fileName"] + "<br />");
-      items.push("Uploaded by: " + val["userName"] + " (user id: " + val["userID"] + ")<br />");
-      items.push("<hr />");
-      items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
 
+      if (val["fileExtension"] === "jpg" || val["fileExtension"] === "png" || val["fileExtension"] === "gif") {
+        items.push("<img src='" + BLOB_ACCOUNT + val["filePath"] + "' width='400' /><br />");
+      } else if (val["fileExtension"] === "mp4") {
+        items.push("<video controls width='400'>");
+        items.push("<source src='" + BLOB_ACCOUNT + val["filePath"] + "' type='video/mp4' />");
+        items.push("Your browser does not support the video tag.");
+        items.push("</video><br />");
+      } else if (val["fileExtension"] === "mp3") {
+        items.push("<audio controls>");
+        items.push("<source src='" + BLOB_ACCOUNT + val["filePath"] + "' type='audio/mp3' />");
+        items.push("Your browser does not support the audio tag.");
+        items.push("</audio><br />");
+      }
+
+      items.push("Uploaded by: " + val["userName"]);
+      items.push("<hr />");
+      if (val["id"] == getUserId()) {
+        items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
+      }
     });
 
     //Clear the postlist div
@@ -189,7 +204,7 @@ function getPosts() {
 
 }
 
-function deleteAsset(id) {
+function deletePost(id) {
   $.ajax({
     type: "DELETE",
     //Note the need to concatenate the
