@@ -186,9 +186,7 @@ function getPosts() {
 
       items.push("Uploaded by: " + val["userName"]);
       items.push("<hr />");
-      if (val["id"] == getUserId()) {
-        items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
-      }
+      items.push('<button type="button" id="subNewForm" class="btn btn-danger" onclick="deleteAsset(\'' + val["id"] + '\')">Delete</button> <br/><br/>');
     });
 
     //Clear the postlist div
@@ -210,7 +208,7 @@ function deletePost(id) {
     //Note the need to concatenate the
     url: DII1 + id + DII2,
   }).done(function (msg) {
-    //On success, update the assetlist
+    //On success, update the postlist
     getPosts();
   });
 }
